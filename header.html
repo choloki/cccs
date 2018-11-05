@@ -1,0 +1,113 @@
+<!-- 头部 start -->
+    <header id="header">
+        <div class="top_banner">
+            <img src="images/top_banner.jpg" alt="">
+        </div>
+
+        <script src="/ee74_travel/js/jquery-3.3.1.js"></script>
+        <script src="/ee74_travel/js/getParameter.js"></script>
+        <script>
+            $(function(){
+                /*当前用户没有登录  只有登录和注册*/
+                $(".login").hide();
+                /*当前用户登录了 没有登录和注册 只有用户信息*/
+                // 页面一加载 去sesson中获取 给ajax
+                var url="/ee74_travel/user";
+                var data="methodName=findSessionUser";
+                $.post(url,data,function(d){
+                    // 在当前页面些内容
+                    var html=" <span>欢迎回来，"+d.data.name+"</span>\n" +
+                        "                <a href=\"myfavorite.html?pageNumber=1\" class=\"collection\">我的收藏</a>\n" +
+                        "                <a href=\"/ee74_travel/user?methodName=quit\">退出</a>";
+                    $(".login").html(html);
+                    // 显示登录的
+                    $(".login").show();
+                    // 未登录的隐藏
+                    $(".login_out").hide();
+
+                },"json");
+
+            })
+        </script>
+
+        <!--导航条功能-->
+        <script>
+            $(function(){
+                // 给服务器发送ajax请求
+                var url="/ee74_travel/category";
+                var data="methodName=findCategory";
+                $.post(url,data,function(d){
+                    // 遍历json数据
+                    for(var i=0;i<d.length;i++){
+                        // 获取导航条元素添加内容
+                        $(".nav").append("<li><a href=/ee74_travel/route_list.html?pageNumber=1&cid="+d[i].cid+">"+d[i].cname+"</li>");
+                }
+                },"json");
+            })
+        </script>
+
+        <script>
+            $(function(){
+                $(".search-button").click(function(){
+                    // 将cid和rname以及pageNumber传递给route_list.html
+                    var cid=getParameter("cid");
+                    var rname=$("#rname").val();
+                    // 给route_list.html
+                    location.href="/ee74_travel/route_list.html?pageNumber=1&cid="+cid+"&rname="+rname;
+
+                })
+            })
+        </script>
+
+        <div class="shortcut">
+            <!-- 未登录状态  -->
+            <div class="login_out">
+                <a href="login.html">登录</a>
+                <a href="register.html">注册</a>
+            </div>
+
+            <!-- 登录状态  -->
+            <div class="login">
+                <span>欢迎回来，admin</span>
+                <a href="myfavorite.html" class="collection">我的收藏</a>
+                <a href="javascript:;">退出</a>
+            </div>
+        </div>
+        <div class="header_wrap">
+            <div class="topbar">
+                <div class="logo">
+                    <a href="/"><img src="images/logo.jpg" alt=""></a>
+                </div>
+                <div class="search">
+                    <input id="rname" name="rname" type="text" placeholder="请输入路线名称" class="search_input" autocomplete="off">
+                    <a href="javascript:;" class="search-button">搜索</a>
+                </div>
+                <div class="hottel">
+                    <div class="hot_pic">
+                        <img src="images/hot_tel.jpg" alt="">
+                    </div>
+                    <div class="hot_tel">
+                        <p class="hot_time">客服热线(9:00-6:00)</p>
+                        <p class="hot_num">400-618-9090</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- 头部 end -->
+     <!-- 首页导航 -->
+    <div class="navitem">
+        <ul class="nav">
+           <!-- <li class="nav-active"><a href="index.html">首页</a></li>
+            <li><a href="route_list.html">门票</a></li>
+            <li><a href="route_list.html">酒店</a></li>
+            <li><a href="route_list.html">香港车票</a></li>
+            <li><a href="route_list.html">出境游</a></li>
+            <li><a href="route_list.html">国内游</a></li>
+            <li><a href="route_list.html">港澳游</a></li>
+            <li><a href="route_list.html">抱团定制</a></li>
+            <li><a href="route_list.html">全球自由行</a></li>
+            <li><a href="favoriterank.html">收藏排行榜</a></li>-->
+        </ul>
+    </div>
+    

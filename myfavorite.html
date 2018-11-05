@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>黑马旅游网-我的收藏</title>
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="css/common.css">
+        <link rel="stylesheet" href="css/index.css">
+       <style>
+           .tab-content .row>div {
+            margin-top: 16px;
+           } 
+           .tab-content {
+            margin-bottom: 36px;
+           }
+       </style>
+       <script src="js/jquery-3.3.1.js"></script>
+        <script src="js/getParameter.js"></script>
+       <script>
+           $(function(){
+               var url="/ee74_travel/favorite";
+               var pageNumber=getParameter("pageNumber");
+               alert(pageNumber);
+               var data="methodName=myFavorite&pageNumber="+pageNumber;
+               $.post(url,data,function(d) {
+                   // 拼接
+                   var html = "";
+                   for (var i = 0; i < d.list.length; i++) {
+                       html = html + "<div class=\"col-md-3\">\n" +
+                           "                                    <a href=\"route_detail.html\">\n" +
+                           "                                        <img src=\"/ee74_travel/" + d.list[i].rimage + "\" alt=\"\">\n" +
+                           "                                        <div class=\"has_border\">\n" +
+                           "                                            <h3>" + d.list[i].rname + "</h3>\n" +
+                           "                                            <div class=\"price\">网付价<em>￥</em><strong>" + d.list[i].price + "</strong><em>起</em></div>\n" +
+                           "                                        </div>\n" +
+                           "                                    </a>\n" +
+                           "                                </div>";
+                   }
+                   // 覆盖
+                   $(".row").html(html);
+                   // 分页
+                   // 2 首页---尾页
+                   var html2="";
+                   if(d.pageNumber!=1){
+                       html2=html2+"<li><a href=/ee74_travel/myfavorite.html?pageNumber=1>首页</a>";
+                       var lastPage=(d.pageNumber)-1;
+                       html2=html2+"<li class='threeword'><a href=/ee74_travel/myfavorite.html?pageNumber="+lastPage+">上一页</a>";
+                   }
+
+                   /*页码---总页数循环*/
+                   var begin;
+                   var end;
+                   // 总页数小于等于10页
+                   if(d.totalPage<=10){
+                       begin=1;
+                       end=d.totalPage;
+                   } // 总页数小于等于10页  103页
+                   else{
+                       // 当前是第10
+                       begin=d.pageNumber-5;
+                       end=d.pageNumber+4;
+                       // 判断首和尾的越界问题
+                       if(begin<=1){
+                           begin=1;
+                           end=10;
+                       }
+                       if(end>=d.totalPage){
+                           end=d.totalPage;
+                           begin=d.totalPage-9;
+                       }
+
+                   }
+
+                   for(var i=begin;i<=end;i++){
+                       html2=html2+"<li><a href=/ee74_travel/myfavorite.html?pageNumber="+i+">"+i+"</a>";
+                   }
+
+
+                   if(d.pageNumber!=d.totalPage){
+                       var nextPage=(d.pageNumber)+1;
+                       html2=html2+"<li class='threeword'><a href=/ee74_travel/myfavorite.html?pageNumber="+nextPage+">下一页</a>";
+                       html2=html2+"<li class='threeword'><a href=/ee74_travel/myfavorite.html?pageNumber="+d.totalPage+">尾页</a>";
+                   }
+                   $("#ul2").html(html2);
+
+               },"json");
+
+           });
+       </script>
+    </head>
+    <body>
+    <!--引入头部-->
+    <div id="header"></div>
+         <!-- 排行榜 start-->
+        <section id="content">            
+            <section class="hemai_jx">
+                <div class="jx_top">
+                    <div class="jx_tit">
+                        <img src="images/icon_5.jpg" alt="">
+                        <span>我的收藏</span>
+                    </div>                    
+                </div>
+                <div class="jx_content">
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane active" id="home">
+
+                            <div class="row">
+                               <!--数据-->
+                                <div class="col-md-3">
+                                    <a href="route_detail.html">
+                                        <img src="images/collection_pic.jpg" alt="">
+                                        <div class="has_border">
+                                            <h3>上海直飞三亚5天4晚自由行(春节预售+亲子/蜜月/休闲游首选+豪华酒店任选+接送机)</h3>
+                                            <div class="price">网付价<em>￥</em><strong>889</strong><em>起</em></div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>                       
+                    </div>
+                </div>
+
+                <!--分页-->
+                <div class="pageNum">
+                    <ul id="ul2">
+                        <!--<li><a href="">首页</a></li>
+                        <li class="threeword"><a href="#">上一页</a></li>
+                        <li><a href="#">1</a></li>
+                        <li><a href="#">2</a></li>
+                        <li><a href="#">3</a></li>
+                        <li><a href="#">4</a></li>
+                        <li><a href="#">5</a></li>
+                        <li><a href="#">6</a></li>
+                        <li><a href="#">7</a></li>
+                        <li><a href="#">8</a></li>
+                        <li><a href="#">9</a></li>
+                        <li><a href="#">10</a></li>
+                        <li class="threeword"><a href="javascript:;">下一页</a></li>
+                        <li class="threeword"><a href="javascript:;">末页</a></li>-->
+                    </ul>
+                </div>
+            </section>                      
+        </section>
+        <!-- 排行榜 end-->
+    	
+         <!--引入尾部-->
+    	<div id="footer"></div>
+        <!--导入布局js，共享header和footer-->
+        <script type="text/javascript" src="js/include.js"></script>
+    </body>
+</html>
